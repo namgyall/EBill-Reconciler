@@ -1,4 +1,4 @@
-# BPC E-bill Reconciler by Namgyall
+# BPC E-bill Reconciler by Namgyal
 
 BPC E-bill Reconciler is a native macOS SwiftUI application for processing BPC
 electricity-bill and receipt PDFs. It is implemented in Swift; there is no
