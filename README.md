@@ -1,57 +1,52 @@
 # BPC E-bill Reconciler
 
-Native macOS SwiftUI app for reading BPC electricity bill and receipt PDFs,
-checking outstanding balances, reconciling payments, managing station
-mappings, and generating reports and settlement documents. PDF extraction and
-scanned-page OCR use Apple's PDFKit and Vision frameworks locally.
+BPC E-bill Reconciler is a native macOS SwiftUI application for processing BPC
+electricity-bill and receipt PDFs. It is implemented in Swift; there is no
+Python implementation or Python runtime requirement.
 
 ## Requirements
 
 - macOS 14 or later
-- Apple's Swift compiler and signing tools (`swiftc`, `codesign`, `ditto`),
-  available with Xcode Command Line Tools
+- Xcode Command Line Tools, including `swiftc`, `codesign`, and `lipo`
 
-This is the macOS Swift app; there are no Python source files. A separate
-Windows port would require a distinct implementation.
+## Build and install
 
-## Build from Terminal
-
-Clone or download this repository, then run:
+Double-click `build-macos.command` in Finder, or run it from Terminal:
 
 ```sh
-mkdir -p ~/Desktop/"EBill-Reconciler" && \
-cd ~/Desktop/"EBill-Reconciler" && \
-git clone https://github.com/namgyall/EBill-Reconciler.git && \
-cd "EBill-Reconciler" && \
-chmod +x build-macos.command && \
 ./build-macos.command
 ```
 
-By default, the script builds into the Desktop `EBill-Reconciler` directory and
-copies the app to `~/Desktop/EBill-Reconciler`. It will not replace an existing Desktop app;
-instead, it selects the next available numbered app name, such as
-`BPC E-bill Reconciler SwiftUI (2).app`.
+The script builds a universal Apple silicon and Intel app, ad-hoc signs and
+verifies it, then places it in `BUILD/` at the repository root beside this
+README. The script resolves its project root from its own location, so it
+works from any current Terminal directory. Its only output directory is that
+root's `BUILD/`; it does not create an `EBill-Reconciler/` or
+`EBILL-Reconciler/` project folder. It refuses to overwrite an existing app
+bundle. The generated `.app` is a macOS application bundle: Finder presents
+it like a single package, but internally it is a directory containing the
+app's executable, resources, and metadata.
 
-The App will be available at `~/Desktop/EBill-Reconciler/build` Folder
-
-To install the built app in another folder:
+To clone into a project folder you already created, first make sure that
+folder is empty, then run this from inside it:
 
 ```sh
-OUTPUT_DIR="$HOME/Applications" ./build-macos.command
+git clone <repository-url> .
 ```
 
-The app is ad-hoc signed, not notarized. macOS may show a Gatekeeper warning
-the first time it is opened.
+The final `.` means “clone into this folder”; omitting it makes Git create a
+new child folder instead.
 
-## Project files
+The ad-hoc signature is intended for local use and does not provide Apple
+Developer ID notarization. macOS may display a first-launch security prompt.
 
-- `BPCApp.swift` — SwiftUI interface and app workflows
-- `BPCServices.swift` — PDF/OCR parsing, reconciliation, station persistence,
-  and document/report exports
-- `BPCAppInfo.plist` — app bundle metadata
+## Source package
+
+- `BPCApp.swift` and `BPCServices.swift` — application and processing logic
+- `BPCAppInfo.plist` — bundle metadata
 - `Resources/AppIcon.icns` — app icon
-- `build-macos.command` — terminal build, signing, verification, and install
+- `build-macos.command` — builds, signs, verifies, and installs the app
 
-No sample invoices or receipts are required to build. Keep user documents out
-of source control. Before publishing a public GitHub repository, choose and
-add an appropriate license; this folder does not include one.
+Generated build output is excluded by `.gitignore`. Do not add customer
+invoices, receipts, exported data, logs, or other personal documents to the
+source package.

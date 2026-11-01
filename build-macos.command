@@ -3,10 +3,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "$0")" && pwd)"
 APP_NAME="BPC E-bill Reconciler SwiftUI"
-OUTPUT_DIR="${OUTPUT_DIR:-$SCRIPT_DIR/BUILD}"
-if [[ "$OUTPUT_DIR" != /* ]]; then
-    OUTPUT_DIR="$SCRIPT_DIR/$OUTPUT_DIR"
-fi
+OUTPUT_DIR="$SCRIPT_DIR/BUILD"
 
 fail() {
     printf 'Error: %s\n' "$*" >&2
